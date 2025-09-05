@@ -8,7 +8,6 @@ import Analytics from './pages/Analytics'
 import Login from './pages/Login'
 import { UserProvider } from './context/UserContext'
 import { DataProvider } from './context/DataContext'
-// import './App.css'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
