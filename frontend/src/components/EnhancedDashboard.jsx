@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { AlertTriangle, MapPin, Clock, Users, TrendingUp, Activity, Waves, Satellite, Shield, Globe } from 'lucide-react'
+import { AlertTriangle, MapPin, Clock, Users, TrendingUp, Activity, Waves, Satellite, Shield, Globe, Phone } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useUser } from '../context/UserContext'
 import HazardMap from './HazardMap'
@@ -8,6 +8,9 @@ import StatCard from './StatCard'
 import FilterPanel from './FilterPanel'
 import WeatherWidget from './WeatherWidget'
 import AlertBanner from './AlertBanner'
+import InteractiveCharts from './InteractiveCharts'
+import RealTimeAlerts from './RealTimeAlerts'
+import EmergencyContacts from './EmergencyContacts'
 
 const EnhancedDashboard = () => {
   const { filteredReports, reports } = useData()
@@ -151,7 +154,8 @@ const EnhancedDashboard = () => {
                 { id: 'overview', label: 'Overview', icon: Activity },
                 { id: 'map', label: 'Live Map', icon: MapPin },
                 { id: 'reports', label: 'Reports', icon: AlertTriangle },
-                { id: 'analytics', label: 'Analytics', icon: TrendingUp }
+                { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+                { id: 'emergency', label: 'Emergency', icon: Phone }
               ].map((tab) => {
                 const Icon = tab.icon
                 return (
@@ -316,15 +320,16 @@ const EnhancedDashboard = () => {
         )}
 
         {activeTab === 'analytics' && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-6">
-            <h3 className="text-lg font-semibold mb-4">Analytics Dashboard</h3>
-            <div className="text-center py-12">
-              <TrendingUp className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">Advanced analytics coming soon...</p>
-            </div>
-          </div>
+          <InteractiveCharts />
+        )}
+
+        {activeTab === 'emergency' && (
+          <EmergencyContacts />
         )}
       </div>
+
+      {/* Real-time Alerts Overlay */}
+      <RealTimeAlerts />
     </div>
   )
 }

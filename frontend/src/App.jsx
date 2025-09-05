@@ -6,6 +6,7 @@ import ReportHazard from './pages/ReportHazard'
 import SocialMedia from './pages/SocialMedia'
 import Analytics from './pages/Analytics'
 import Login from './pages/Login'
+import UserProfile from './components/UserProfile'
 import { UserProvider } from './context/UserContext'
 import { DataProvider } from './context/DataContext'
 
@@ -64,6 +65,14 @@ function App() {
                 element={
                   isAuthenticated ?
                     <Analytics /> :
+                    <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  isAuthenticated ?
+                    <UserProfile /> :
                     <Navigate to="/login" />
                 }
               />
