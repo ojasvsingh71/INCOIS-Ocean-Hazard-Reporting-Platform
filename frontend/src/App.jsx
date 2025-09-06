@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import ReportHazard from './pages/ReportHazard'
 import SocialMedia from './pages/SocialMedia'
 import Analytics from './pages/Analytics'
+import MapDashboard from './components/MapDashboard'
 import Login from './pages/Login'
 import UserProfile from './components/UserProfile'
 import { UserProvider } from './context/UserContext'
@@ -65,6 +66,14 @@ function App() {
                 element={
                   isAuthenticated ?
                     <Analytics /> :
+                    <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/map"
+                element={
+                  isAuthenticated ?
+                    <MapDashboard /> :
                     <Navigate to="/login" />
                 }
               />

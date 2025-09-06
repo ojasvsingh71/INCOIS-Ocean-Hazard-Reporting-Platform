@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Settings } from 'lucide-react'
+import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Settings,MapPin } from 'lucide-react'
 import { useUser } from '../context/UserContext'
 import NotificationCenter from './NotificationCenter'
 
@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/dashboard', icon: Home, label: 'Dashboard' },
+    { path: '/map', icon: MapPin, label: 'Live Map' },
     { path: '/report', icon: AlertTriangle, label: 'Report Hazard' },
     { path: '/social-media', icon: MessageCircle, label: 'Social Media' },
     { path: '/analytics', icon: BarChart3, label: 'Analytics' }
