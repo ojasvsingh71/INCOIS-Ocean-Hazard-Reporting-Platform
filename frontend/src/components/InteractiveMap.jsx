@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, LayersControl, useMap } from 'react-leaflet'
 import { divIcon } from 'leaflet'
-import { AlertTriangle, MapPin, Layers, ZoomIn, ZoomOut, Crosshair, Satellite, Navigation, Filter, Eye, EyeOff, Settings, Download, Share2, Maximize2 } from 'lucide-react'
+import { AlertTriangle, MapPin, Layers, ZoomIn, ZoomOut, Crosshair, Satellite, Navigation, Filter, Eye, EyeOff, Settings, Download, Share2, Maximize2, X } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
 import 'leaflet-defaulticon-compatibility'
@@ -92,7 +92,7 @@ const InteractiveMap = ({ reports = [], onReportClick, height = '600px', showCon
   }
 
   // Filter reports based on selected severity
-  const filteredReports = reports.filter(report => 
+  const filteredReports = reports.filter(report =>
     selectedSeverity === 'all' || report.severity === selectedSeverity
   )
 
@@ -115,7 +115,7 @@ const InteractiveMap = ({ reports = [], onReportClick, height = '600px', showCon
   // Weather overlay component (simulated)
   const WeatherOverlay = () => {
     if (!showWeatherLayer) return null
-    
+
     const weatherData = [
       { position: [13.0827, 80.2707], temp: 28, condition: 'sunny' },
       { position: [9.9312, 76.2673], temp: 26, condition: 'cloudy' },
@@ -177,11 +177,10 @@ const InteractiveMap = ({ reports = [], onReportClick, height = '600px', showCon
                 <button
                   key={key}
                   onClick={() => setMapView(key)}
-                  className={`px-3 py-2 text-xs font-medium rounded transition-colors ${
-                    mapView === key
+                  className={`px-3 py-2 text-xs font-medium rounded transition-colors ${mapView === key
                       ? 'bg-blue-600 text-white'
                       : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   {key.charAt(0).toUpperCase() + key.slice(1)}
                 </button>
@@ -349,7 +348,7 @@ const InteractiveMap = ({ reports = [], onReportClick, height = '600px', showCon
         className="z-0"
       >
         <MapControls />
-        
+
         {/* Base Layer */}
         <TileLayer
           url={mapLayers[mapView].url}
@@ -422,34 +421,32 @@ const InteractiveMap = ({ reports = [], onReportClick, height = '600px', showCon
                   <h4 className="font-semibold text-gray-900 capitalize">
                     {report.type.replace('_', ' ')}
                   </h4>
-                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${
-                    report.severity === 'high' ? 'bg-red-100 text-red-800' :
-                    report.severity === 'medium' ? 'bg-orange-100 text-orange-800' :
-                    'bg-yellow-100 text-yellow-800'
-                  }`}>
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${report.severity === 'high' ? 'bg-red-100 text-red-800' :
+                      report.severity === 'medium' ? 'bg-orange-100 text-orange-800' :
+                        'bg-yellow-100 text-yellow-800'
+                    }`}>
                     {report.severity}
                   </span>
                 </div>
-                
+
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center space-x-2">
                     <MapPin className="w-3 h-3 text-gray-400" />
                     <span className="text-gray-600">{report.location.name}</span>
                   </div>
-                  
+
                   <p className="text-gray-700 text-xs leading-relaxed">
                     {report.description}
                   </p>
-                  
+
                   <div className="flex items-center justify-between pt-2 border-t border-gray-200">
                     <span className="text-xs text-gray-500">
                       {new Date(report.timestamp).toLocaleString()}
                     </span>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      report.status === 'verified' ? 'bg-green-100 text-green-700' :
-                      report.status === 'investigating' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-orange-100 text-orange-700'
-                    }`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${report.status === 'verified' ? 'bg-green-100 text-green-700' :
+                        report.status === 'investigating' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-orange-100 text-orange-700'
+                      }`}>
                       {report.status}
                     </span>
                   </div>

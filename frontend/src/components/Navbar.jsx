@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Settings } from 'lucide-react'
+import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Settings,MapPin } from 'lucide-react'
 import { useUser } from '../context/UserContext'
 import NotificationCenter from './NotificationCenter'
 
