@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Bell, Settings } from 'lucide-react'
+import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Settings } from 'lucide-react'
 import { useUser } from '../context/UserContext'
+import NotificationCenter from './NotificationCenter'
 
 const Navbar = () => {
   const location = useLocation()
@@ -57,13 +58,8 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Notification Bell */}
-            <button className="relative p-2 text-blue-200 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
-              <Bell className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs flex items-center justify-center">
-                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-              </span>
-            </button>
+            {/* Enhanced Notification Center */}
+            <NotificationCenter />
             
             {/* Settings */}
             <button className="p-2 text-blue-200 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
@@ -71,10 +67,13 @@ const Navbar = () => {
             </button>
             
             {/* User Info */}
-            <div className="text-sm bg-white/10 rounded-lg px-3 py-2 backdrop-blur-sm">
+            <Link 
+              to="/profile"
+              className="text-sm bg-white/10 rounded-lg px-3 py-2 backdrop-blur-sm hover:bg-white/20 transition-colors cursor-pointer"
+            >
               <span className="text-blue-200">Welcome,</span>
               <span className="font-semibold ml-1 text-white">{user?.name}</span>
-            </div>
+            </Link>
             
             {/* Role Badge */}
             <div className={`px-3 py-1 rounded-full text-xs font-semibold shadow-lg ${
