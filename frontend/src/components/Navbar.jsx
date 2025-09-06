@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/dashboard', icon: Home, label: 'Dashboard' },
+    { path: '/map', icon: MapPin, label: 'Live Map' },
     { path: '/report', icon: AlertTriangle, label: 'Report Hazard' },
     { path: '/social-media', icon: MessageCircle, label: 'Social Media' },
     { path: '/analytics', icon: BarChart3, label: 'Analytics' }

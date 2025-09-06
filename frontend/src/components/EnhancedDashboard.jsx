@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { AlertTriangle, MapPin, Clock, Users, TrendingUp, Activity, Waves, Satellite, Shield, Globe, Phone } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useUser } from '../context/UserContext'
-import HazardMap from './HazardMap'
+import InteractiveMap from './InteractiveMap'
 import ReportCard from './ReportCard'
 import StatCard from './StatCard'
 import FilterPanel from './FilterPanel'
@@ -183,14 +183,18 @@ const EnhancedDashboard = () => {
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Hazard Distribution Map</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Live Hazard Monitoring</h3>
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span className="text-sm text-gray-600">Live Data</span>
                   </div>
                 </div>
-                <div className="h-96 rounded-lg overflow-hidden">
-                  <HazardMap reports={filteredReports} />
+                <div className="h-[500px] rounded-lg overflow-hidden border border-gray-200">
+                  <InteractiveMap 
+                    reports={filteredReports} 
+                    height="500px"
+                    onReportClick={(report) => console.log('Report clicked:', report)}
+                  />
                 </div>
               </div>
 
@@ -289,21 +293,24 @@ const EnhancedDashboard = () => {
         {activeTab === 'map' && (
           <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Interactive Hazard Map</h3>
+              <h3 className="text-lg font-semibold">Advanced Interactive Map</h3>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-sm text-gray-600">Real-time Updates</span>
                 </div>
-                <select className="px-3 py-1 border border-gray-300 rounded-md text-sm">
-                  <option>Satellite View</option>
-                  <option>Terrain View</option>
-                  <option>Ocean Depth</option>
-                </select>
               </div>
             </div>
-            <div className="h-[600px] rounded-lg overflow-hidden">
-              <HazardMap reports={filteredReports} interactive={true} />
+            <div className="h-[700px] rounded-lg overflow-hidden border border-gray-200">
+              <InteractiveMap 
+                reports={filteredReports} 
+                height="700px"
+                showControls={true}
+                onReportClick={(report) => {
+                  // Handle report click - could open modal or navigate
+                  console.log('Report clicked:', report)
+                }}
+              />
             </div>
           </div>
         )}
