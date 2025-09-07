@@ -4,7 +4,7 @@ import { TrendingUp, BarChart3, PieChart as PieChartIcon, Activity, Calendar, Ma
 import { useData } from '../context/DataContext'
 
 const EnhancedAnalytics = () => {
-  const { reports } = useData()
+  const { reports, getAnalytics } = useData() 
   const [activeChart, setActiveChart] = useState('overview')
   const [timeRange, setTimeRange] = useState('7d')
   const [selectedMetric, setSelectedMetric] = useState('reports')
@@ -14,7 +14,7 @@ const EnhancedAnalytics = () => {
   // Enhanced chart data generation
   const generateAnalyticsData = () => {
     const analytics = getAnalytics()
-    
+
     const trendData = [
       ...analytics.trendData.slice(-30).map(day => ({
         ...day,
@@ -78,7 +78,7 @@ const EnhancedAnalytics = () => {
 
   useEffect(() => {
     setAnalyticsData(generateAnalyticsData())
-    
+
     // Real-time updates
     if (isRealTime) {
       const interval = setInterval(() => {
@@ -105,8 +105,8 @@ const EnhancedAnalytics = () => {
           {payload.map((entry, index) => (
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
-                <div 
-                  className="w-3 h-3 rounded-full" 
+                <div
+                  className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: entry.color }}
                 ></div>
                 <span className="text-sm text-gray-700">{entry.name}:</span>
@@ -127,20 +127,18 @@ const EnhancedAnalytics = () => {
           <p className="text-sm font-medium text-gray-600">{title}</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
           {change && (
-            <p className={`text-sm font-medium mt-1 ${
-              change.startsWith('+') ? 'text-green-600' : 'text-red-600'
-            }`}>
+            <p className={`text-sm font-medium mt-1 ${change.startsWith('+') ? 'text-green-600' : 'text-red-600'
+              }`}>
               {change} vs last period
             </p>
           )}
         </div>
-        <div className={`p-3 rounded-xl ${
-          color === 'blue' ? 'bg-blue-100 text-blue-600' :
+        <div className={`p-3 rounded-xl ${color === 'blue' ? 'bg-blue-100 text-blue-600' :
           color === 'green' ? 'bg-green-100 text-green-600' :
-          color === 'orange' ? 'bg-orange-100 text-orange-600' :
-          color === 'red' ? 'bg-red-100 text-red-600' :
-          'bg-purple-100 text-purple-600'
-        }`}>
+            color === 'orange' ? 'bg-orange-100 text-orange-600' :
+              color === 'red' ? 'bg-red-100 text-red-600' :
+                'bg-purple-100 text-purple-600'
+          }`}>
           <Icon className="w-6 h-6" />
         </div>
       </div>
@@ -158,7 +156,7 @@ const EnhancedAnalytics = () => {
             </h1>
             <p className="text-gray-600 mt-2">Comprehensive insights and performance metrics for ocean hazard monitoring</p>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <div className={`w-3 h-3 rounded-full ${isRealTime ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
@@ -172,7 +170,7 @@ const EnhancedAnalytics = () => {
                 {isRealTime ? 'Pause' : 'Resume'}
               </button>
             </div>
-            
+
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
@@ -184,7 +182,7 @@ const EnhancedAnalytics = () => {
               <option value="30d">Last 30 Days</option>
               <option value="90d">Last 90 Days</option>
             </select>
-            
+
             <div className="flex items-center space-x-2">
               <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
                 <Download className="w-5 h-5" />
@@ -255,11 +253,10 @@ const EnhancedAnalytics = () => {
               <button
                 key={chart.id}
                 onClick={() => setActiveChart(chart.id)}
-                className={`flex items-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
-                  activeChart === chart.id
-                    ? 'bg-gradient-to-r from-blue-600 to-teal-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
+                className={`flex items-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${activeChart === chart.id
+                  ? 'bg-gradient-to-r from-blue-600 to-teal-600 text-white shadow-md'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{chart.label}</span>
@@ -281,8 +278,8 @@ const EnhancedAnalytics = () => {
                   <AreaChart data={analyticsData.trendData}>
                     <defs>
                       <linearGradient id="colorReports" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -300,7 +297,7 @@ const EnhancedAnalytics = () => {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-              
+
               <div className="h-80">
                 <h4 className="text-lg font-medium mb-4">Performance Metrics</h4>
                 <div className="space-y-4">
@@ -316,9 +313,8 @@ const EnhancedAnalytics = () => {
                         <div className="text-xl font-bold text-gray-900">
                           {metric.current}{metric.unit}
                         </div>
-                        <div className={`text-sm ${
-                          metric.current >= metric.target ? 'text-green-600' : 'text-orange-600'
-                        }`}>
+                        <div className={`text-sm ${metric.current >= metric.target ? 'text-green-600' : 'text-orange-600'
+                          }`}>
                           {metric.current >= metric.target ? '✓ On Target' : '⚠ Below Target'}
                         </div>
                       </div>
@@ -387,19 +383,19 @@ const EnhancedAnalytics = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            
+
             <div>
               <h4 className="text-lg font-medium mb-4">Severity Distribution Over Time</h4>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={analyticsData.severityTrends}>
                   <defs>
                     <linearGradient id="colorCritical" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#dc2626" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#dc2626" stopOpacity={0.1}/>
+                      <stop offset="5%" stopColor="#dc2626" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#dc2626" stopOpacity={0.1} />
                     </linearGradient>
                     <linearGradient id="colorHigh" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ea580c" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#ea580c" stopOpacity={0.1}/>
+                      <stop offset="5%" stopColor="#ea580c" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#ea580c" stopOpacity={0.1} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -482,7 +478,7 @@ const EnhancedAnalytics = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="risk" name="Risk Level" stroke="#6b7280" />
                     <YAxis dataKey="preparedness" name="Preparedness" stroke="#6b7280" />
-                    <Tooltip 
+                    <Tooltip
                       cursor={{ strokeDasharray: '3 3' }}
                       content={({ active, payload }) => {
                         if (active && payload && payload.length) {
@@ -505,7 +501,7 @@ const EnhancedAnalytics = () => {
                   </ScatterChart>
                 </ResponsiveContainer>
               </div>
-              
+
               <div>
                 <h4 className="text-lg font-medium mb-4">Risk Summary</h4>
                 <div className="space-y-3 max-h-80 overflow-y-auto">
@@ -513,12 +509,11 @@ const EnhancedAnalytics = () => {
                     <div key={index} className="p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-gray-900">{zone.zone}</span>
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          zone.risk > 80 ? 'bg-red-100 text-red-800' :
+                        <span className={`px-2 py-1 text-xs rounded-full ${zone.risk > 80 ? 'bg-red-100 text-red-800' :
                           zone.risk > 60 ? 'bg-orange-100 text-orange-800' :
-                          zone.risk > 40 ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-green-100 text-green-800'
-                        }`}>
+                            zone.risk > 40 ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
+                          }`}>
                           {zone.risk > 80 ? 'Critical' : zone.risk > 60 ? 'High' : zone.risk > 40 ? 'Medium' : 'Low'} Risk
                         </span>
                       </div>
@@ -566,7 +561,7 @@ const EnhancedAnalytics = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <h4 className="text-lg font-medium mb-4">Response Time by Region</h4>
                 <ResponsiveContainer width="100%" height="80%">
