@@ -13,54 +13,66 @@ const EnhancedAnalytics = () => {
 
   // Enhanced chart data generation
   const generateAnalyticsData = () => {
+    const analytics = getAnalytics()
+    
     const trendData = [
-      { date: 'Mon', reports: 12, verified: 8, resolved: 6, responseTime: 2.5, accuracy: 94 },
-      { date: 'Tue', reports: 19, verified: 14, resolved: 10, responseTime: 2.1, accuracy: 96 },
-      { date: 'Wed', reports: 8, verified: 6, resolved: 4, responseTime: 3.2, accuracy: 92 },
-      { date: 'Thu', reports: 25, verified: 18, resolved: 15, responseTime: 1.8, accuracy: 97 },
-      { date: 'Fri', reports: 16, verified: 11, resolved: 8, responseTime: 2.3, accuracy: 95 },
-      { date: 'Sat', reports: 22, verified: 15, resolved: 12, responseTime: 2.0, accuracy: 96 },
-      { date: 'Sun', reports: 14, verified: 10, resolved: 7, responseTime: 2.7, accuracy: 93 }
+      ...analytics.trendData.slice(-30).map(day => ({
+        ...day,
+        responseTime: Math.random() * 3 + 1,
+        accuracy: Math.random() * 10 + 90
+      }))
     ]
 
-    const hazardTypeData = [
-      { name: 'Tsunami', value: 35, color: '#dc2626', trend: '+12%' },
-      { name: 'Storm Surge', value: 28, color: '#ea580c', trend: '+8%' },
-      { name: 'High Waves', value: 22, color: '#d97706', trend: '-3%' },
-      { name: 'Swell Surge', value: 15, color: '#65a30d', trend: '+15%' }
-    ]
+    const hazardTypeData = Object.entries(analytics.hazardFrequency).map(([type, count], index) => ({
+      name: type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      value: count,
+      color: ['#dc2626', '#ea580c', '#d97706', '#65a30d', '#3b82f6', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#6366f1', '#84cc16'][index % 11],
+      trend: `${Math.random() > 0.5 ? '+' : '-'}${Math.floor(Math.random() * 20)}%`
+    }))
 
-    const locationAnalytics = [
-      { location: 'Tamil Nadu', reports: 45, severity: 3.2, responseTime: 2.1, accuracy: 96 },
-      { location: 'Kerala', reports: 32, severity: 2.8, responseTime: 2.5, accuracy: 94 },
-      { location: 'Karnataka', reports: 28, severity: 2.5, responseTime: 2.8, accuracy: 92 },
-      { location: 'Andhra Pradesh', reports: 25, severity: 3.0, responseTime: 2.3, accuracy: 95 },
-      { location: 'Goa', reports: 18, severity: 2.2, responseTime: 3.1, accuracy: 91 }
-    ]
+    const locationAnalytics = Object.entries(analytics.regionalStats).map(([region, stats]) => ({
+      location: region.replace(/\b\w/g, l => l.toUpperCase()),
+      reports: stats.count,
+      severity: (stats.severityBreakdown.critical * 4 + stats.severityBreakdown.high * 3 + stats.severityBreakdown.medium * 2 + stats.severityBreakdown.low * 1) / stats.count,
+      responseTime: stats.avgResponseTime / 60, // Convert to hours
+      accuracy: Math.random() * 10 + 90,
+      economicImpact: stats.totalEconomicImpact
+    }))
 
     const performanceMetrics = [
-      { metric: 'Response Time', current: 2.3, target: 2.0, unit: 'hours' },
-      { metric: 'Accuracy Rate', current: 94, target: 95, unit: '%' },
+      { metric: 'Response Time', current: analytics.responseTimeStats.average / 60, target: 2.0, unit: 'hours' },
+      { metric: 'Verification Rate', current: parseFloat(analytics.verificationRate), target: 95, unit: '%' },
+      { metric: 'Resolution Rate', current: parseFloat(analytics.resolutionRate), target: 85, unit: '%' },
       { metric: 'Coverage Area', current: 98.5, target: 99, unit: '%' },
       { metric: 'User Satisfaction', current: 4.2, target: 4.5, unit: '/5' },
-      { metric: 'System Uptime', current: 99.8, target: 99.9, unit: '%' },
-      { metric: 'Alert Speed', current: 1.2, target: 1.0, unit: 'seconds' }
+      { metric: 'System Uptime', current: 99.8, target: 99.9, unit: '%' }
     ]
 
-    const riskAssessment = [
-      { zone: 'Zone A', risk: 85, population: 250000, preparedness: 78 },
-      { zone: 'Zone B', risk: 72, population: 180000, preparedness: 82 },
-      { zone: 'Zone C', risk: 65, population: 320000, preparedness: 75 },
-      { zone: 'Zone D', risk: 58, population: 150000, preparedness: 88 },
-      { zone: 'Zone E', risk: 45, population: 200000, preparedness: 85 }
-    ]
+    const riskAssessment = Object.entries(analytics.regionalStats).slice(0, 8).map(([region, stats], index) => ({
+      zone: region.replace(/\b\w/g, l => l.toUpperCase()),
+      risk: Math.min(100, (stats.severityBreakdown.critical * 25 + stats.severityBreakdown.high * 15 + stats.severityBreakdown.medium * 8 + stats.severityBreakdown.low * 3)),
+      population: Math.floor(Math.random() * 500000) + 100000,
+      preparedness: Math.floor(Math.random() * 30) + 70,
+      recentIncidents: stats.count,
+      economicRisk: stats.totalEconomicImpact / 1000000 // Convert to millions
+    }))
+
+    const severityTrends = analytics.trendData.slice(-7).map(day => ({
+      date: day.date,
+      critical: day.critical || 0,
+      high: day.high || 0,
+      medium: day.medium || 0,
+      low: day.low || 0
+    }))
 
     return {
       trendData,
       hazardTypeData,
       locationAnalytics,
       performanceMetrics,
-      riskAssessment
+      riskAssessment,
+      severityTrends,
+      analytics
     }
   }
 
@@ -191,31 +203,45 @@ const EnhancedAnalytics = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Reports"
-            value={reports.length}
+            value={analyticsData.analytics?.totalReports || reports.length}
             change="+12%"
             icon={Activity}
             color="blue"
           />
           <StatCard
             title="Response Time"
-            value="2.3h"
+            value={analyticsData.analytics?.responseTimeStats?.averageFormatted || "2.3h"}
             change="-15%"
             icon={Clock}
             color="green"
           />
           <StatCard
             title="Accuracy Rate"
-            value="94%"
+            value={`${analyticsData.analytics?.verificationRate || 94}%`}
             change="+3%"
             icon={Target}
             color="purple"
           />
           <StatCard
-            title="Active Alerts"
-            value={reports.filter(r => r.severity === 'high').length}
+            title="Critical Reports"
+            value={analyticsData.analytics?.criticalReports || 0}
             change="-8%"
             icon={AlertTriangle}
             color="red"
+          />
+          <StatCard
+            title="Economic Impact"
+            value={analyticsData.analytics?.economicImpact?.formatted || "₹0Cr"}
+            change="+25%"
+            icon={TrendingUp}
+            color="orange"
+          />
+          <StatCard
+            title="Affected Population"
+            value={`${Math.floor((analyticsData.analytics?.totalAffectedPopulation || 0) / 1000)}K`}
+            change="+18%"
+            icon={Users}
+            color="indigo"
           />
         </div>
       </div>
@@ -363,15 +389,54 @@ const EnhancedAnalytics = () => {
             </div>
             
             <div>
-              <h4 className="text-lg font-medium mb-4">Regional Distribution</h4>
+              <h4 className="text-lg font-medium mb-4">Severity Distribution Over Time</h4>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={analyticsData.locationAnalytics}>
+                <AreaChart data={analyticsData.severityTrends}>
+                  <defs>
+                    <linearGradient id="colorCritical" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#dc2626" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#dc2626" stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="colorHigh" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ea580c" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#ea580c" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="location" stroke="#6b7280" />
+                  <XAxis dataKey="date" stroke="#6b7280" />
                   <YAxis stroke="#6b7280" />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="reports" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                </BarChart>
+                  <Area
+                    type="monotone"
+                    dataKey="critical"
+                    stackId="1"
+                    stroke="#dc2626"
+                    fill="url(#colorCritical)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="high"
+                    stackId="1"
+                    stroke="#ea580c"
+                    fill="url(#colorHigh)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="medium"
+                    stackId="1"
+                    stroke="#d97706"
+                    fill="#d97706"
+                    fillOpacity={0.6}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="low"
+                    stackId="1"
+                    stroke="#65a30d"
+                    fill="#65a30d"
+                    fillOpacity={0.6}
+                  />
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
@@ -410,31 +475,64 @@ const EnhancedAnalytics = () => {
         {activeChart === 'risk' && (
           <div className="h-96">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Risk Assessment by Zone</h3>
-            <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart data={analyticsData.riskAssessment}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="risk" name="Risk Level" stroke="#6b7280" />
-                <YAxis dataKey="preparedness" name="Preparedness" stroke="#6b7280" />
-                <Tooltip 
-                  cursor={{ strokeDasharray: '3 3' }}
-                  content={({ active, payload }) => {
-                    if (active && payload && payload.length) {
-                      const data = payload[0].payload
-                      return (
-                        <div className="bg-white/95 backdrop-blur-sm p-4 border border-gray-200 rounded-lg shadow-xl">
-                          <p className="font-semibold text-gray-900 mb-2">{data.zone}</p>
-                          <p className="text-sm text-gray-700">Risk Level: {data.risk}%</p>
-                          <p className="text-sm text-gray-700">Preparedness: {data.preparedness}%</p>
-                          <p className="text-sm text-gray-700">Population: {data.population.toLocaleString()}</p>
-                        </div>
-                      )
-                    }
-                    return null
-                  }}
-                />
-                <Scatter dataKey="preparedness" fill="#3b82f6" />
-              </ScatterChart>
-            </ResponsiveContainer>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+              <div>
+                <ResponsiveContainer width="100%" height="80%">
+                  <ScatterChart data={analyticsData.riskAssessment}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="risk" name="Risk Level" stroke="#6b7280" />
+                    <YAxis dataKey="preparedness" name="Preparedness" stroke="#6b7280" />
+                    <Tooltip 
+                      cursor={{ strokeDasharray: '3 3' }}
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload
+                          return (
+                            <div className="bg-white/95 backdrop-blur-sm p-4 border border-gray-200 rounded-lg shadow-xl">
+                              <p className="font-semibold text-gray-900 mb-2">{data.zone}</p>
+                              <p className="text-sm text-gray-700">Risk Level: {data.risk}%</p>
+                              <p className="text-sm text-gray-700">Preparedness: {data.preparedness}%</p>
+                              <p className="text-sm text-gray-700">Population: {data.population.toLocaleString()}</p>
+                              <p className="text-sm text-gray-700">Recent Incidents: {data.recentIncidents}</p>
+                              <p className="text-sm text-gray-700">Economic Risk: ₹{data.economicRisk.toFixed(1)}M</p>
+                            </div>
+                          )
+                        }
+                        return null
+                      }}
+                    />
+                    <Scatter dataKey="preparedness" fill="#3b82f6" />
+                  </ScatterChart>
+                </ResponsiveContainer>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-medium mb-4">Risk Summary</h4>
+                <div className="space-y-3 max-h-80 overflow-y-auto">
+                  {analyticsData.riskAssessment?.map((zone, index) => (
+                    <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-gray-900">{zone.zone}</span>
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          zone.risk > 80 ? 'bg-red-100 text-red-800' :
+                          zone.risk > 60 ? 'bg-orange-100 text-orange-800' :
+                          zone.risk > 40 ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'
+                        }`}>
+                          {zone.risk > 80 ? 'Critical' : zone.risk > 60 ? 'High' : zone.risk > 40 ? 'Medium' : 'Low'} Risk
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                        <div>Population: {zone.population.toLocaleString()}</div>
+                        <div>Preparedness: {zone.preparedness}%</div>
+                        <div>Incidents: {zone.recentIncidents}</div>
+                        <div>Economic Risk: ₹{zone.economicRisk.toFixed(1)}M</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -452,13 +550,17 @@ const EnhancedAnalytics = () => {
                         <div>
                           <span className="font-medium text-gray-900">{location.location}</span>
                           <div className="text-sm text-gray-600">
-                            Avg Severity: {location.severity}/5
+                            Avg Severity: {location.severity.toFixed(1)}/4
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Economic Impact: ₹{(location.economicImpact / 1000000).toFixed(1)}M
                           </div>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="text-lg font-bold text-gray-900">{location.reports}</div>
                         <div className="text-sm text-gray-600">reports</div>
+                        <div className="text-sm text-gray-600">{location.responseTime.toFixed(1)}h avg</div>
                       </div>
                     </div>
                   ))}

@@ -22,14 +22,17 @@ const EnhancedDashboard = () => {
   const stats = {
     totalReports: reports.length,
     activeHazards: reports.filter(r => r.status !== 'resolved').length,
-    highSeverity: reports.filter(r => r.severity === 'high').length,
+    criticalSeverity: reports.filter(r => r.severity === 'critical').length,
+    highSeverity: reports.filter(r => r.severity === 'high' || r.severity === 'critical').length,
     last24h: reports.filter(r => {
       const reportTime = new Date(r.timestamp)
       const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
       return reportTime > dayAgo
     }).length,
-    responseTime: '2.3h',
-    coverage: '98.5%'
+    responseTime: '2.1h',
+    coverage: '98.7%',
+    verificationRate: '94.2%',
+    resolutionRate: '87.5%'
   }
 
   // Enhanced stats with additional metrics
@@ -44,9 +47,9 @@ const EnhancedDashboard = () => {
     },
     {
       title: 'Critical Alerts',
-      value: stats.activeHazards,
+      value: stats.criticalSeverity,
       icon: AlertTriangle,
-      trend: '-3%',
+      trend: '+8%',
       color: 'red',
       description: 'Requiring immediate attention'
     },
@@ -59,28 +62,28 @@ const EnhancedDashboard = () => {
       description: 'Average response time'
     },
     {
+      title: 'Verification Rate',
+      value: stats.verificationRate,
+      icon: Shield,
+      trend: '+3%',
+      color: 'purple',
+      description: 'Reports verified by experts'
+    },
+    {
       title: 'Coverage Area',
       value: stats.coverage,
-      icon: Shield,
+      icon: Globe,
       trend: '+2%',
-      color: 'purple',
+      color: 'teal',
       description: 'Coastal monitoring coverage'
     },
     {
-      title: 'Satellite Data',
-      value: '24/7',
-      icon: Satellite,
-      trend: 'Live',
-      color: 'teal',
-      description: 'Real-time satellite feeds'
-    },
-    {
-      title: 'Global Network',
-      value: '156',
-      icon: Globe,
-      trend: '+8%',
+      title: 'Resolution Rate',
+      value: stats.resolutionRate,
+      icon: CheckCircle,
+      trend: '+5%',
       color: 'indigo',
-      description: 'Connected monitoring stations'
+      description: 'Successfully resolved cases'
     }
   ]
 
@@ -99,6 +102,13 @@ const EnhancedDashboard = () => {
                   Ocean Hazard Command Center
                 </h1>
                 <p className="text-gray-600 mt-1">Real-time monitoring and early warning system</p>
+                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                  <span>Last updated: {new Date().toLocaleTimeString()}</span>
+                  <span>•</span>
+                  <span>{stats.last24h} reports in last 24h</span>
+                  <span>•</span>
+                  <span className="text-green-600 font-medium">System Operational</span>
+                </div>
               </div>
             </div>
             
@@ -118,9 +128,9 @@ const EnhancedDashboard = () => {
         <AlertBanner />
 
         {/* Enhanced Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
           {enhancedStats.map((stat, index) => (
-            <div key={index} className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 p-5">
+            <div key={index} className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 p-6 group">
               <div className="flex items-center justify-between mb-3">
                 <div className={`p-2 rounded-lg ${
                   stat.color === 'blue' ? 'bg-blue-100 text-blue-600' :
@@ -128,7 +138,8 @@ const EnhancedDashboard = () => {
                   stat.color === 'green' ? 'bg-green-100 text-green-600' :
                   stat.color === 'purple' ? 'bg-purple-100 text-purple-600' :
                   stat.color === 'teal' ? 'bg-teal-100 text-teal-600' :
-                  'bg-indigo-100 text-indigo-600'
+                  stat.color === 'indigo' ? 'bg-indigo-100 text-indigo-600' :
+                  'bg-orange-100 text-orange-600'
                 }`}>
                   <stat.icon className="w-5 h-5" />
                 </div>
@@ -140,7 +151,7 @@ const EnhancedDashboard = () => {
                   {stat.trend}
                 </span>
               </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+              <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-3xl transition-all duration-200">{stat.value}</div>
               <div className="text-xs font-medium text-gray-600 mb-1">{stat.title}</div>
               <div className="text-xs text-gray-500">{stat.description}</div>
             </div>
@@ -156,7 +167,8 @@ const EnhancedDashboard = () => {
                 { id: 'map', label: 'Live Map', icon: MapPin },
                 { id: 'reports', label: 'Reports', icon: AlertTriangle },
                 { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-                { id: 'emergency', label: 'Emergency', icon: Phone }
+                { id: 'emergency', label: 'Emergency', icon: Phone },
+                { id: 'social', label: 'Social Intel', icon: MessageCircle }
               ].map((tab) => {
                 const Icon = tab.icon
                 return (
@@ -171,6 +183,11 @@ const EnhancedDashboard = () => {
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
+                    {tab.id === 'reports' && stats.criticalSeverity > 0 && (
+                      <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {stats.criticalSeverity}
+                      </span>
+                    )}
                   </button>
                 )
               })}
@@ -221,6 +238,40 @@ const EnhancedDashboard = () => {
                   </button>
                 </div>
               </div>
+
+              {/* System Health */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-lg font-semibold mb-4">System Health</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">API Response Time</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="w-3/4 bg-green-500 h-2 rounded-full"></div>
+                      </div>
+                      <span className="text-sm font-medium text-green-700">120ms</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Database Performance</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="w-5/6 bg-green-500 h-2 rounded-full"></div>
+                      </div>
+                      <span className="text-sm font-medium text-green-700">Optimal</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Alert Processing</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-green-500 h-2 rounded-full"></div>
+                      </div>
+                      <span className="text-sm font-medium text-green-700">100%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-6">
@@ -230,18 +281,25 @@ const EnhancedDashboard = () => {
               <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">Recent Alerts</h3>
-                  <span className="text-sm text-gray-500">{filteredReports.length} active</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-500">{filteredReports.length} active</span>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  </div>
                 </div>
                 <div className="space-y-3 max-h-80 overflow-y-auto">
-                  {filteredReports.slice(0, 6).map((report) => (
+                  {filteredReports.slice(0, 8).map((report) => (
                     <div key={report.id} className="flex items-center space-x-3 p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg border border-gray-100 hover:shadow-sm transition-all duration-200">
                       <div className={`w-3 h-3 rounded-full ${
+                        report.severity === 'critical' ? 'bg-red-600 animate-pulse' :
                         report.severity === 'high' ? 'bg-red-500 animate-pulse' :
                         report.severity === 'medium' ? 'bg-orange-500' : 'bg-yellow-500'
                       }`}></div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-gray-900">{report.location.name}</p>
                         <p className="text-xs text-gray-500 capitalize">{report.type.replace('_', ' ')}</p>
+                        {report.affectedPopulation && (
+                          <p className="text-xs text-gray-400">{Math.floor(report.affectedPopulation / 1000)}K affected</p>
+                        )}
                       </div>
                       <div className="text-right">
                         <span className="text-xs text-gray-400">
@@ -283,6 +341,13 @@ const EnhancedDashboard = () => {
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-sm font-medium text-green-700">Active</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Satellite Feed</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium text-green-700">Live</span>
                     </div>
                   </div>
                 </div>
@@ -333,6 +398,20 @@ const EnhancedDashboard = () => {
 
         {activeTab === 'emergency' && (
           <EmergencyContacts />
+        )}
+
+        {activeTab === 'social' && (
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-6">
+            <h3 className="text-lg font-semibold mb-4">Social Media Intelligence</h3>
+            <p className="text-gray-600 mb-4">Real-time social media monitoring for hazard-related content</p>
+            <div className="text-center py-8">
+              <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500">Social media monitoring dashboard coming soon...</p>
+              <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Enable Social Monitoring
+              </button>
+            </div>
+          </div>
         )}
         
         {/* Export & Share Panel */}
