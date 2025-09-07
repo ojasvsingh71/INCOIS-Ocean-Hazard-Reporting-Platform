@@ -44,7 +44,29 @@ const mockReports = [
     reporter: 'Fisherman',
     status: 'confirmed',
     media: []
-  }
+  },
+  {
+    id: '4',
+    type: 'cyclone',
+    location: { lat: 17.6868, lng: 83.2185, name: 'Visakhapatnam, Andhra Pradesh' },
+    severity: 'high',
+    description: 'Cyclone winds reaching up to 120 km/h',
+    timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    reporter: 'Weather Department',
+    status: 'alert_issued',
+    media: ['https://images.pexels.com/photos/635499/pexels-photo-635499.jpeg']
+  },
+  {
+    id: '5',
+    type: 'flood',
+    location: { lat: 19.0760, lng: 72.8777, name: 'Mumbai, Maharashtra' },
+    severity: 'medium',
+    description: 'Heavy rainfall causing waterlogging in multiple areas',
+    timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+    reporter: 'News Reporter',
+    status: 'ongoing',
+    media: ['https://images.pexels.com/photos/460621/pexels-photo-460621.jpeg']
+  },
 ]
 
 const mockSocialMediaPosts = [
@@ -67,6 +89,26 @@ const mockSocialMediaPosts = [
     engagement: 89,
     timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
     relevanceScore: 0.85
+  },
+  {
+    id: 'sm3',
+    platform: 'instagram',
+    content: 'Posted a video of strong winds shaking trees in Vizag 🌪️ #CycloneAlert',
+    location: 'Visakhapatnam',
+    sentiment: 'alert',
+    engagement: 310,
+    timestamp: new Date(Date.now() - 1000 * 60 * 40).toISOString(),
+    relevanceScore: 0.92
+  },
+  {
+    id: 'sm4',
+    platform: 'twitter',
+    content: 'Mumbai streets are flooded again! Traffic is at a standstill. #MumbaiRains',
+    location: 'Mumbai',
+    sentiment: 'frustration',
+    engagement: 150,
+    timestamp: new Date(Date.now() - 1000 * 60 * 50).toISOString(),
+    relevanceScore: 0.88
   }
 ]
 
