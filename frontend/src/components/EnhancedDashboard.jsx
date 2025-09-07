@@ -11,6 +11,7 @@ import AlertBanner from './AlertBanner'
 import InteractiveCharts from './InteractiveCharts'
 import RealTimeAlerts from './RealTimeAlerts'
 import EmergencyContacts from './EmergencyContacts'
+import ExportShare from './ExportShare'
 
 const EnhancedDashboard = () => {
   const { filteredReports, reports } = useData()
@@ -332,6 +333,13 @@ const EnhancedDashboard = () => {
 
         {activeTab === 'emergency' && (
           <EmergencyContacts />
+        )}
+        
+        {/* Export & Share Panel */}
+        {(activeTab === 'reports' || activeTab === 'analytics') && (
+          <div className="mt-6">
+            <ExportShare data={filteredReports} title="Ocean Hazard Analysis Report" />
+          </div>
         )}
       </div>
 

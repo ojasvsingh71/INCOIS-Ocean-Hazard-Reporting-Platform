@@ -1,1 +1,128 @@
 @import "tailwindcss";
+
+/* Accessibility Styles */
+.high-contrast {
+  filter: contrast(150%);
+}
+
+.high-contrast .bg-white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.high-contrast .text-gray-600 {
+  color: #000000 !important;
+}
+
+.high-contrast .text-gray-500 {
+  color: #333333 !important;
+}
+
+.large-text {
+  font-size: 1.125rem !important;
+}
+
+.large-text h1 {
+  font-size: 2.5rem !important;
+}
+
+.large-text h2 {
+  font-size: 2rem !important;
+}
+
+.large-text h3 {
+  font-size: 1.75rem !important;
+}
+
+.large-text .text-sm {
+  font-size: 1rem !important;
+}
+
+.large-text .text-xs {
+  font-size: 0.875rem !important;
+}
+
+.keyboard-navigation *:focus {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+.keyboard-navigation button:focus,
+.keyboard-navigation input:focus,
+.keyboard-navigation select:focus,
+.keyboard-navigation textarea:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1000;
+}
+
+.skip-to-content:focus {
+  top: 6px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .bg-gray-50 {
+    background-color: #ffffff !important;
+  }
+  
+  .text-gray-600 {
+    color: #000000 !important;
+  }
+  
+  .border-gray-200 {
+    border-color: #000000 !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .bg-gradient-to-r,
+  .bg-gradient-to-br {
+    background: white !important;
+    color: black !important;
+  }
+}

@@ -3,11 +3,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Home, AlertTriangle, MessageCircle, BarChart3, LogOut, Waves, Settings,MapPin } from 'lucide-react'
 import { useUser } from '../context/UserContext'
 import NotificationCenter from './NotificationCenter'
+import LanguageSelector from './LanguageSelector'
+import { useTranslation } from 'react-i18next'
 
 const Navbar = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useUser()
+  const { t } = useTranslation()
 
   const handleLogout = () => {
     logout()
@@ -15,11 +18,11 @@ const Navbar = () => {
   }
 
   const navItems = [
-    { path: '/dashboard', icon: Home, label: 'Dashboard' },
-    { path: '/map', icon: MapPin, label: 'Live Map' },
-    { path: '/report', icon: AlertTriangle, label: 'Report Hazard' },
-    { path: '/social-media', icon: MessageCircle, label: 'Social Media' },
-    { path: '/analytics', icon: BarChart3, label: 'Analytics' }
+    { path: '/dashboard', icon: Home, label: t('nav.dashboard') },
+    { path: '/map', icon: MapPin, label: t('nav.map') },
+    { path: '/report', icon: AlertTriangle, label: t('nav.report') },
+    { path: '/social-media', icon: MessageCircle, label: t('nav.social') },
+    { path: '/analytics', icon: BarChart3, label: t('nav.analytics') }
   ]
 
   return (
@@ -62,6 +65,9 @@ const Navbar = () => {
             {/* Enhanced Notification Center */}
             <NotificationCenter />
             
+            {/* Language Selector */}
+            <LanguageSelector />
+            
             {/* Settings */}
             <button className="p-2 text-blue-200 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <Settings className="w-5 h-5" />
@@ -89,7 +95,7 @@ const Navbar = () => {
               className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-blue-200 hover:text-white hover:bg-red-500/20 border border-transparent hover:border-red-400/30 transition-all duration-200"
             >
               <LogOut className="w-4 h-4" />
-              <span>Logout</span>
+              <span>{t('nav.logout')}</span>
             </button>
           </div>
         </div>

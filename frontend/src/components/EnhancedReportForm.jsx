@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { MapPin, Camera, Upload, AlertTriangle, CheckCircle, Mic, Video, FileText } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useUser } from '../context/UserContext'
+import MediaUpload from './MediaUpload'
 
 const EnhancedReportForm = ({ onClose }) => {
   const { addReport } = useData()
-  const { user } = useUser()
+  const { user, canPerformAction } = useUser()
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
     type: '',
@@ -16,11 +17,27 @@ const EnhancedReportForm = ({ onClose }) => {
     urgency: 'normal',
     witnesses: '',
     damage: '',
-    evacuationNeeded: false
+    evacuationNeeded: false,
+    reporterEmail: user?.email || '',
+    tags: []
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
+  // Check if user can submit reports
+  if (!canPerformAction('submit_report')) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <AlertTriangle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Restricted</h2>
+          <p className="text-gray-600">
+            You don't have permission to submit reports. Please contact your administrator.
+          </p>
+        </div>
+      </div>
+    )
+  }
   const hazardTypes = [
     { value: 'tsunami', label: 'Tsunami', description: 'Unusual wave behavior or tsunami activity', icon: '🌊' },
     { value: 'storm_surge', label: 'Storm Surge', description: 'Storm-related coastal flooding', icon: '⛈️' },
@@ -353,34 +370,11 @@ const EnhancedReportForm = ({ onClose }) => {
 
             <div>
               <h3 className="text-xl font-semibold mb-4">Upload Media (Optional)</h3>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8">
-                <div className="text-center">
-                  <div className="flex justify-center space-x-4 mb-4">
-                    <Camera className="w-8 h-8 text-gray-400" />
-                    <Video className="w-8 h-8 text-gray-400" />
-                    <Mic className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Upload photos, videos, or audio recordings of the hazard
-                  </p>
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      type="button"
-                      className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <Upload className="w-4 h-4" />
-                      <span>Choose Files</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <Camera className="w-4 h-4" />
-                      <span>Take Photo</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <MediaUpload
+                onMediaChange={(media) => setFormData(prev => ({ ...prev, media }))}
+                existingMedia={formData.media}
+                maxFiles={5}
+              />
             </div>
           </div>
         )}

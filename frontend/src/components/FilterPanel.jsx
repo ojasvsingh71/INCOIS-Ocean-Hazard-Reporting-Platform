@@ -1,6 +1,8 @@
 import React from 'react'
 import { Filter, X } from 'lucide-react'
 import { useData } from '../context/DataContext'
+import DateRangeFilter from './DateRangeFilter'
+import ProximityFilter from './ProximityFilter'
 
 const FilterPanel = () => {
   const { filters, setFilters } = useData()
@@ -47,11 +49,20 @@ const FilterPanel = () => {
       type: 'all',
       severity: 'all',
       status: 'all',
-      dateRange: '24h'
+      dateRange: '24h',
+      customDateRange: { start: null, end: null },
+      proximity: { enabled: false, center: null, radius: 50 },
+      region: 'all'
     })
   }
 
-  const hasActiveFilters = Object.values(filters).some(value => value !== 'all' && value !== '24h')
+  const hasActiveFilters = 
+    filters.type !== 'all' || 
+    filters.severity !== 'all' || 
+    filters.status !== 'all' || 
+    filters.dateRange !== '24h' ||
+    filters.proximity.enabled ||
+    filters.region !== 'all'
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -129,20 +140,28 @@ const FilterPanel = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Time Range
+            Region
           </label>
           <select
-            value={filters.dateRange}
-            onChange={(e) => updateFilter('dateRange', e.target.value)}
+            value={filters.region}
+            onChange={(e) => updateFilter('region', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
           >
-            {dateRanges.map((range) => (
-              <option key={range.value} value={range.value}>
-                {range.label}
-              </option>
-            ))}
+            <option value="all">All Regions</option>
+            <option value="tamil nadu">Tamil Nadu</option>
+            <option value="kerala">Kerala</option>
+            <option value="karnataka">Karnataka</option>
+            <option value="goa">Goa</option>
+            <option value="maharashtra">Maharashtra</option>
+            <option value="andhra pradesh">Andhra Pradesh</option>
           </select>
         </div>
+      </div>
+      
+      {/* Advanced Filters */}
+      <div className="mt-6 pt-6 border-t border-gray-200 space-y-6">
+        <DateRangeFilter />
+        <ProximityFilter />
       </div>
     </div>
   )
